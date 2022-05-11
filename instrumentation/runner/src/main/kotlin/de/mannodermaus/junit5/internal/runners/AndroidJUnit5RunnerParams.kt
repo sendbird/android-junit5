@@ -60,7 +60,15 @@ internal fun createRunnerParams(testClass: Class<*>): AndroidJUnit5RunnerParams 
     // which aren't subject to the filtering imposed through adb.
     // A special resource file may be looked up at runtime, containing
     // the filters to apply by the AndroidJUnit5 runner.
-    val filters = GeneratedFilters.fromContext(instrumentation.context)
+    val filters = mutableListOf<Filter<*>>()
+    val contextFilters = GeneratedFilters.fromContext(instrumentation.context)
+    filters.addAll(contextFilters)
+
+    val numShards = arguments.getString("numShards")?.toInt() ?: -1
+    val shardIndex = arguments.getString("shardIndex")?.toInt() ?: -1
+    if (numShards > 0 && shardIndex >= 0 && shardIndex < numShards) {
+        filters.add(ShardingFilter(numShards, shardIndex))
+    }
 
     return AndroidJUnit5RunnerParams(
         selectors,
