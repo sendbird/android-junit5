@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: Junit5 for android
+  description: Junit5 for android
+  annotations:
+    github.com/project-slug: sendbird/android-junit5
+spec:
+  type: library
+  lifecycle: experimental
+  owner: dep-client-platform
+  system: sendbird-chat
